@@ -6,8 +6,8 @@ This library reads temperature values from several TSIC sensor types (TSIC 206/3
 ## Usage
 
 The TsicSensor library uses following classes:
-* `TsicScale` selects a temperature scale (Celsius/Fahrenheit/Kelvin) for a sensor instance
-* `TsicType` defines the type of the used TSIC sensor (TSIC_203...TSIC_716)
+* `TsicScale` selects a temperature scale (Celsius/Fahrenheit/Kelvin) for a sensor instance	
+* `TsicType` defines the type of the used TSIC sensor (TSIC_206,TSIC_306,TSIC_316,TSIC_506,TSIC_516,TSIC_716)
 * `TsicSensor` this is the sensor class used to read the temperature values.
 
 To create a sensor instance (the library supports up to 4 instances at the same time) use a call to the `TsicSensor::create(byte input_pin, byte vcc_pin, TsicType type)` function. e.g.:
@@ -15,12 +15,31 @@ To create a sensor instance (the library supports up to 4 instances at the same 
 ```
 TsicSensor* sensor1 = TsicSensor::create(16, 25, TsicType::TSIC_506);
 ```
+This initializes a TSIC 506 sensor with the signal pin at GPIO 16 and the Vcc pin at GPIO 25.
+ 
+Use `TsicExternalVcc` for the vcc_pin parameter if the sensor is powered with an external Vcc:
+```
+TsicSensor* sensor2 = TsicSensor::create(17, TsicExternalVcc, TsicType::TSIC_506);
+```
 
-This initializes a TSIC 506 sensor with the signal pin at GPIO 16 and the Vcc pin at GPIO 25. Use `TsicExternalVcc` for the vcc_pin parameter if the sensor is powered with an external Vcc.
-
-The newly created `sensor1` instance can now be used to read temperature values in several scales...
+The newly created sensor instances can now be used to read temperature values in several scales, e.g.:
 
 ```
+  float temperature = sensor1->getTempCelsius();
+```
+
+
+## available TsicSensor functions
+
+```
+  // -------------------------------------------------------------------------------------------------------
+  // * Creates and initializes a new sensor instance with the given type and input/vcc pins. 
+  // * Use "TsicExternalVcc" for the "vcc_pin" parameter if the sensor is connected directly to Vcc.
+  // * A maximum of 4 instances can be operated at the same time.
+  // * Returns a pointer to a sensor instance (or "nullptr" if the operation failed). 
+  // -------------------------------------------------------------------------------------------------------
+  static TsicSensor* create(byte input_pin, byte vcc_pin, TsicType type);  
+  
   // -------------------------------------------------------------------------------------------------------
   // * Returns the latest temperature value in °C (waits up to 100ms for sensor initialization, if needed).
   // * Returns "-273.15" if the read was not successful.
