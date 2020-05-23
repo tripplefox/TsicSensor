@@ -11,6 +11,8 @@
 
 namespace {
   
+  // sensor-type specific parameters used for temperature calculations 
+  
   // TSIC_206/306 : LT = -50°C; HT = 150°C; 11-bit ADC
   // TSIC_316     : LT = -50°C; HT = 150°C; 14-bit ADC
   // TSIC_506     : LT = -10°C; HT = 60°C;  11-bit ADC

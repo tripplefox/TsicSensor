@@ -11,6 +11,10 @@
 
 #include "Arduino.h"
 
+// -------------------------------------------------------------------------------
+// internal data class used to hold the working variables of a sensor instance
+// -------------------------------------------------------------------------------
+
 class TsicData {
   public:
       TsicData(byte signal_pin, byte vcc_pin, byte sensor_type, byte idx);

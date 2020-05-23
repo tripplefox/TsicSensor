@@ -26,9 +26,9 @@ ISR isrs[4] = {isr1, isr2, isr3, isr4};
 
 // ------------------------------------------------------------------------------------------
 // * Creates and initializes a new sensor instance with the given type and input/vcc pins. 
-// * Use "NO_VCC_PIN" for the "vcc_pin" parameter if the sensor is connected directly to Vcc.
+// * Use "TsicExternalVcc" for the "vcc_pin" parameter if the sensor is connected directly to Vcc.
 // * A maximum of 4 instances can be operated at the same time.
-// * Returns a "nullptr" if the operation failed. 
+// * Returns a pointer to a sensor instance (or "nullptr" if the operation failed). 
 // ------------------------------------------------------------------------------------------
 TsicSensor* TsicSensor::create(byte input_pin, byte vcc_pin, TsicType type)
 {
@@ -66,10 +66,11 @@ TsicSensor::~TsicSensor()
   m_data = nullptr;
 }
 
-// ---------------------------------------------------------------------------------------------
-// * Returns "true" if a new temperature value was received since the last "*getTemp*()" call.
-// * (this happens if the sensor is connected directly to Vcc -> it sends its values with 10Hz)
-// ---------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+// * If the sensor is connected directly to Vcc, it sends its values 10 times per second.
+// * This function returns "true" if the received temperature value has changed since the last call to
+// * one of the "*getTemp*()" functions.
+// -------------------------------------------------------------------------------------------------------
 bool TsicSensor::newValueAvailable()
 {
   if(m_data!=nullptr)
@@ -77,10 +78,10 @@ bool TsicSensor::newValueAvailable()
   return false;
 }
 
-// ------------------------------------------------------------------------------------------
-// * Returns the latest temperature value in °C (waits for sensor initialization, if needed).
+// -------------------------------------------------------------------------------------------------------
+// * Returns the latest temperature value in °C (waits up to 100ms for sensor initialization, if needed).
 // * Returns "-273.15" if the read was not successful.
-// ------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 float TsicSensor::getTempCelsius()
 {
   float result = -273.15;
@@ -88,10 +89,10 @@ float TsicSensor::getTempCelsius()
   return result;
 }
 
-// ------------------------------------------------------------------------------------------
-// * Returns the latest temperature value in °F (waits for sensor initialization, if needed).
+// -------------------------------------------------------------------------------------------------------
+// * Returns the latest temperature value in °F (waits up to 100ms for sensor initialization, if needed).
 // * Returns "-459.67" if the read was not successful.
-// ------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 float TsicSensor::getTempFahrenheit()
 {
    float result = -459.67;   
@@ -99,10 +100,10 @@ float TsicSensor::getTempFahrenheit()
    return result;
 }
 
-// ------------------------------------------------------------------------------------------
-// * Returns the latest temperature value in °K (waits for sensor initialization, if needed).
+// -------------------------------------------------------------------------------------------------------
+// * Returns the latest temperature value in °K (waits up to 100ms for sensor initialization, if needed).
 // * Returns "0" if the read was not successful.
-// ------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 float TsicSensor::getTempKelvin()
 {
   float result = 0;
@@ -110,11 +111,11 @@ float TsicSensor::getTempKelvin()
   return result;
 }
 
-// ------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 // * Gets the latest temperature value in °C/°F/°K. 
-// * (waits max. 100ms for sensor initialization, if needed).
+// * (waits up to 100ms for sensor initialization, if needed).
 // * Returns "true" if the read was successful, "false" otherwise.
-// ------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 bool TsicSensor::tryGetTempValue(float* value, TsicScale scale)
 { 
     if((m_data==nullptr)||(value==nullptr))
@@ -123,16 +124,16 @@ bool TsicSensor::tryGetTempValue(float* value, TsicScale scale)
     // if needed, wait for initialization of the sensor...
     if(!m_data->isInitialized)
     {        
-      m_data->powerOn();        // only switches ON if a vcc_pin was specified...
+      m_data->powerOn();            // only switches ON if a vcc_pin was specified...
       unsigned int timeout=0;
       while(!m_data->isInitialized) // it takes up to 65-85ms to start up the sensor 
       {
          delayMicroseconds(25);
-         if(timeout++>4000)       // -> timeout after 100ms
+         if(timeout++>4000)         // -> timeout after 100ms
             return false;
       }
     }
-    m_data->powerOff();         // only switches OFF if a vcc_pin was specified...
+    m_data->powerOff();             // only switches OFF if a vcc_pin was specified...
 
     unsigned int raw = m_data->rawTemp; // get latest (raw) temperature value
     m_data->valueAvailable = false;     // reset signals...

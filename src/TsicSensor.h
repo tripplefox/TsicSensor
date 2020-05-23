@@ -32,43 +32,44 @@ const int TsicExternalVcc = 0xFF;
 
 class TsicSensor {
   public:
-      // ------------------------------------------------------------------------------------------
+      // -------------------------------------------------------------------------------------------------------
       // * Creates and initializes a new sensor instance with the given type and input/vcc pins. 
       // * Use "TsicExternalVcc" for the "vcc_pin" parameter if the sensor is connected directly to Vcc.
       // * A maximum of 4 instances can be operated at the same time.
-      // * Returns a "nullptr" if the operation failed. 
-      // ------------------------------------------------------------------------------------------
+      // * Returns a pointer to a sensor instance (or "nullptr" if the operation failed). 
+      // -------------------------------------------------------------------------------------------------------
       static TsicSensor* create(byte input_pin, byte vcc_pin, TsicType type);
 
-      // ------------------------------------------------------------------------------------------
-      // * Returns the latest temperature value in °C (waits for sensor initialization, if needed).
+      // -------------------------------------------------------------------------------------------------------
+      // * Returns the latest temperature value in °C (waits up to 100ms for sensor initialization, if needed).
       // * Returns "-273.15" if the read was not successful.
-      // ------------------------------------------------------------------------------------------
+      // -------------------------------------------------------------------------------------------------------
       float getTempCelsius();
 
-      // ------------------------------------------------------------------------------------------
-      // * Returns the latest temperature value in °F (waits for sensor initialization, if needed).
+      // -------------------------------------------------------------------------------------------------------
+      // * Returns the latest temperature value in °F (waits up to 100ms for sensor initialization, if needed).
       // * Returns "-459.67" if the read was not successful.
-      // ------------------------------------------------------------------------------------------
+      // -------------------------------------------------------------------------------------------------------
       float getTempFahrenheit();
       
-      // ------------------------------------------------------------------------------------------
-      // * Returns the latest temperature value in °K (waits for sensor initialization, if needed).
-      // * Returns "0" if the read was not successful.
-      // ------------------------------------------------------------------------------------------
+      // -------------------------------------------------------------------------------------------------------
+      // * Returns the latest temperature value in °K (waits up to 100ms for sensor initialization, if needed).
+      // * Returns "0.0" if the read was not successful.
+      // -------------------------------------------------------------------------------------------------------
       float getTempKelvin();
       
-      // ------------------------------------------------------------------------------------------
+      // -------------------------------------------------------------------------------------------------------
       // * Gets the latest temperature value in °C/°F/°K. 
-      // * (waits max. 100ms for sensor initialization, if needed).
+      // * (waits up to 100ms for sensor initialization, if needed).
       // * Returns "true" if the read was successful, "false" otherwise.
-      // ------------------------------------------------------------------------------------------
+      // -------------------------------------------------------------------------------------------------------
       bool tryGetTempValue(float* value, TsicScale scale);
 
-      // ---------------------------------------------------------------------------------------------
-      // * Returns "true" if a new temperature value was received since the last "*getTemp*()" call.
-      // * (this happens if the sensor is connected directly to Vcc -> it sends its values with 10Hz)
-      // ---------------------------------------------------------------------------------------------
+      // -------------------------------------------------------------------------------------------------------
+      // * If the sensor is connected directly to Vcc, it sends its values 10 times per second.
+      // * This function returns "true" if the received temperature value has changed since the last call to
+	  // * one of the "*getTemp*()" functions.
+      // -------------------------------------------------------------------------------------------------------
       bool newValueAvailable();           
 
       ~TsicSensor();     
