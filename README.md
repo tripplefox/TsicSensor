@@ -6,7 +6,7 @@ This library reads temperature values from several TSIC sensor types (TSIC 206/3
 ## Usage
 
 The TsicSensor library uses following classes:
-* `TsicScale` selects a temperature scale (Celsius/Fahrenheit/Kelvin) for a sensor instance	
+* `TsicScale` selects a temperature scale (Celsius/Fahrenheit/Kelvin) for the `tryGetTempValue()` function	
 * `TsicType` defines the type of the used TSIC sensor (TSIC_206,TSIC_306,TSIC_316,TSIC_506,TSIC_516,TSIC_716)
 * `TsicSensor` this is the sensor class used to read the temperature values.
 
