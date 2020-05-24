@@ -1,7 +1,9 @@
 # TsicSensor
 Arduino library for reading TSIC temperature sensors
 
-This library reads temperature values from several TSIC sensor types (TSIC 206/306/506/516/716). It uses interrupts to decode the ZACwire protocol used by the sensors and supports methods for reading temperature values in several scales (Celsius/Fahrenheit/Kelvin)
+This library reads temperature values from several TSIC sensor types (TSIC 206/306/506/516/716). It uses interrupts
+to decode the ZACwire protocol used by the sensors and supports methods for reading temperature values in several 
+scales (Celsius/Fahrenheit/Kelvin)
 
 ## Usage
 
@@ -10,7 +12,8 @@ The TsicSensor library uses following classes:
 * `TsicType` defines the type of the used TSIC sensor (TSIC_206,TSIC_306,TSIC_316,TSIC_506,TSIC_516,TSIC_716)
 * `TsicSensor` this is the sensor class used to read the temperature values.
 
-To create a sensor instance (the library supports up to 4 instances at the same time) use a call to the `TsicSensor::create(byte input_pin, byte vcc_pin, TsicType type)` function.
+To create a sensor instance (the library supports up to 4 instances at the same time) use a call to the
+`TsicSensor::create(byte input_pin, byte vcc_pin, TsicType type)` function.
 
 
 This initializes a TSIC 506 sensor with the signal pin at GPIO 16 and the Vcc pin at GPIO 25:
