@@ -1,2 +1,7 @@
+.pio
+.pio/*.*
 .vscode
 .vscode/*.*
+include
+src/main.cpp
+*.ini
