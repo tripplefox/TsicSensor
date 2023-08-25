@@ -10,7 +10,7 @@
 #define TSIC_Sensor_h
 
 #include "Arduino.h"
-#include "data\TsicData.h"
+#include "data/TsicData.h"
 
 enum class TsicScale : byte{
    Celsius = 0,
